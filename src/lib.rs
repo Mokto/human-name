@@ -1,4 +1,4 @@
-use std::{borrow::Borrow, collections::HashMap};
+use std::collections::HashMap;
 
 use human_name::Name;
 use pyo3::prelude::*;
@@ -46,7 +46,7 @@ fn parse_name(name: String) -> PyResult<HashMap<String, Vec<Option<String>>>> {
 
 /// A Python module implemented in Rust.
 #[pymodule]
-fn html_parsing_tools(_py: Python, m: &PyModule) -> PyResult<()> {
+fn human_name_parser(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(parse_name, m)?)?;
     Ok(())
 }
