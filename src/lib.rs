@@ -1,28 +1,45 @@
-use std::{collections::HashMap, sync::Arc};
+use std::{borrow::Borrow, collections::HashMap};
 
-use kuchiki::{traits::TendrilSink, NodeRef};
-use linkify::{LinkFinder, LinkKind};
+use human_name::Name;
 use pyo3::prelude::*;
-use regex::{Regex, RegexBuilder};
 
 #[pyfunction]
-fn parse_name(name: String) -> PyResult<HashMap<String, Vec<String>>> {
+fn parse_name(name: String) -> PyResult<HashMap<String, Vec<Option<String>>>> {
     let mut result = HashMap::new();
 
-    let n = Name::parse("Jane Doe").unwrap();
+    let n = Name::parse(name.as_str());
 
     if n.is_none() {
         return Ok(result);
     }
 
-    result.insert("given_name".to_string(), vec![n.given_name]);
-    result.insert("surname".to_string(), vec![n.surname]);
+    let n = n.unwrap();
+
+    result.insert(
+        "given_name".to_string(),
+        vec![n.given_name().map(str::to_string)],
+    );
     result.insert(
         "generational_suffix".to_string(),
-        vec![n.generational_suffix],
+        vec![n.generational_suffix().map(str::to_string)],
     );
-    result.insert("honorific_prefix".to_string(), vec![n.honorific_prefix]);
-    result.insert("display_full".to_string(), vec![n.display_full]);
+    result.insert(
+        "honorific_prefix".to_string(),
+        vec![n.honorific_prefix().map(str::to_string)],
+    );
+    result.insert(
+        "honorific_suffix".to_string(),
+        vec![n.honorific_suffix().map(str::to_string)],
+    );
+    result.insert(
+        "middle_name".to_string(),
+        vec![Some(n.middle_name().unwrap_or_default().to_string())],
+    );
+    result.insert("surname".to_string(), vec![Some(n.surname().to_string())]);
+    result.insert(
+        "middle_initials".to_string(),
+        vec![n.middle_initials().map(str::to_string)],
+    );
 
     Ok(result)
 }
