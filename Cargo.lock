@@ -31,14 +31,6 @@ dependencies = [
 
 [[package]]
 name = "human_name"
-version = "0.15.0"
-dependencies = [
- "human_name 2.0.1",
- "pyo3",
-]
-
-[[package]]
-name = "human_name"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42af7ece82db04720531abb16506781d40a72c8e62ecb0762d39746d2173255e"
@@ -55,6 +47,14 @@ dependencies = [
  "unicode-normalization",
  "unicode-segmentation",
  "unidecode",
+]
+
+[[package]]
+name = "human_name_parser"
+version = "0.1.0"
+dependencies = [
+ "human_name",
+ "pyo3",
 ]
 
 [[package]]
